@@ -11,9 +11,9 @@ const DEFAULT_SETTINGS: ClockSettings = {
   backgroundGradient: 'sunset',
   topPadding: 0,
   // NEW: Background image settings
-  backgroundType: 'gradient',
-  backgroundImage: undefined,
-  backgroundImageId: undefined,
+  backgroundType: 'image',
+  backgroundImage: 'https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
+  backgroundImageId: 'default-1',
   // NEW: Clock type and mode settings
   clockType: 'digital',
   clockMode: 'clock',

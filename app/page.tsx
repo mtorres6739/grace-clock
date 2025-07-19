@@ -123,7 +123,7 @@ export default function Home() {
           {/* Footer */}
           <div className="mt-auto pt-8 pb-4">
             <p className="text-white/50 text-sm text-center">
-              Modern Clock App • Built with Next.js & Tailwind CSS
+              © Ethos Labs. 2025. All Rights Reserved.
             </p>
           </div>
         </div>
