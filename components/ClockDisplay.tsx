@@ -31,7 +31,7 @@ export function ClockDisplay({ settings }: ClockDisplayProps) {
       );
     }
     
-    return <Clock settings={settings} />;
+    return <Clock settings={settings} timezone={settings.primaryTimezone} />;
   };
 
   return (

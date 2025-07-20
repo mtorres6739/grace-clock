@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { ClockSettings } from '@/types';
+import { getUserTimezone } from '@/data/timezones';
 
 const DEFAULT_SETTINGS: ClockSettings = {
   fontSize: 80,
@@ -18,7 +19,12 @@ const DEFAULT_SETTINGS: ClockSettings = {
   clockType: 'digital',
   clockMode: 'clock',
   // NEW: Alarm sound settings
-  alarmSound: 'alarm1'
+  alarmSound: 'alarm1',
+  // NEW: Timezone settings
+  primaryTimezone: getUserTimezone(),
+  additionalTimezones: [],
+  timezoneDisplayMode: 'both',
+  maxTimezonesDisplayed: 4
 };
 
 export function useSettings() {
@@ -60,6 +66,20 @@ export function useSettings() {
         // Ensure alarmSound exists (backward compatibility)
         if (!mergedSettings.alarmSound) {
           mergedSettings.alarmSound = DEFAULT_SETTINGS.alarmSound;
+        }
+        
+        // Ensure timezone settings exist (backward compatibility)
+        if (!mergedSettings.primaryTimezone) {
+          mergedSettings.primaryTimezone = DEFAULT_SETTINGS.primaryTimezone;
+        }
+        if (!mergedSettings.additionalTimezones) {
+          mergedSettings.additionalTimezones = DEFAULT_SETTINGS.additionalTimezones;
+        }
+        if (!mergedSettings.timezoneDisplayMode) {
+          mergedSettings.timezoneDisplayMode = DEFAULT_SETTINGS.timezoneDisplayMode;
+        }
+        if (typeof mergedSettings.maxTimezonesDisplayed !== 'number') {
+          mergedSettings.maxTimezonesDisplayed = DEFAULT_SETTINGS.maxTimezonesDisplayed;
         }
         
         setSettings(mergedSettings);

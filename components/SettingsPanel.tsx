@@ -11,12 +11,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Input } from '@/components/ui/input';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Settings, RotateCcw, Palette, Type, Clock, Move, Image as ImageIcon, Timer, Activity, Volume2, Play, Square } from 'lucide-react';
+import { Settings, RotateCcw, Palette, Type, Clock, Move, Image as ImageIcon, Timer, Activity, Volume2, Play, Square, Globe } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import { BackgroundSelector } from '@/components/BackgroundSelector';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ALARM_SOUNDS, type AlarmSound, createAlarmSound } from '@/lib/sounds-urls';
+import { TimezoneSelector } from '@/components/TimezoneSelector';
 
 interface SettingsPanelProps {
   settings: ClockSettings;
@@ -223,6 +224,30 @@ export function SettingsPanel({ settings, onSettingsChange, onReset }: SettingsP
                     </SelectContent>
                   </Select>
                 </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Timezone Settings - Only show for clock mode */}
+          {settings.clockMode === 'clock' && (
+            <Card className="glass-dark border-white/10">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-white flex items-center gap-2 text-lg">
+                  <Globe className="h-4 w-4" />
+                  Timezone Settings
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <TimezoneSelector
+                  primaryTimezone={settings.primaryTimezone}
+                  additionalTimezones={settings.additionalTimezones}
+                  timezoneDisplayMode={settings.timezoneDisplayMode}
+                  maxTimezonesDisplayed={settings.maxTimezonesDisplayed}
+                  onPrimaryTimezoneChange={(timezone) => onSettingsChange({ primaryTimezone: timezone })}
+                  onAdditionalTimezonesChange={(timezones) => onSettingsChange({ additionalTimezones: timezones })}
+                  onDisplayModeChange={(mode) => onSettingsChange({ timezoneDisplayMode: mode })}
+                  onMaxTimezonesChange={(max) => onSettingsChange({ maxTimezonesDisplayed: max })}
+                />
               </CardContent>
             </Card>
           )}

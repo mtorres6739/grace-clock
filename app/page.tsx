@@ -6,6 +6,7 @@ import { BibleVerseCard } from '@/components/BibleVerseCard';
 import { SettingsPanel } from '@/components/SettingsPanel';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { Skeleton } from '@/components/ui/skeleton';
+import { MultiTimezoneDisplay } from '@/components/MultiTimezoneDisplay';
 
 const GRADIENT_STYLES = {
   sunset: 'bg-gradient-to-br from-orange-400 via-red-500 to-pink-500',
@@ -107,6 +108,11 @@ export default function Home() {
               }}>
                 <ClockDisplay settings={settings} />
               </div>
+
+              {/* Multiple Timezones Display - Only show in clock mode */}
+              {settings.clockMode === 'clock' && (
+                <MultiTimezoneDisplay settings={settings} />
+              )}
 
               {/* Bible Verse Card - Only show in clock mode */}
               {settings.clockMode === 'clock' && (

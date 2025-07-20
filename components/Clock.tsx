@@ -6,11 +6,14 @@ import { cn } from '@/lib/utils';
 
 interface ClockProps {
   settings: ClockSettings;
+  timezone?: string;
+  showLabel?: boolean;
+  label?: string;
 }
 
-export function Clock({ settings }: ClockProps) {
+export function Clock({ settings, timezone, showLabel = false, label }: ClockProps) {
   const { formatTime, getDate } = useClock();
-  const { time, period } = formatTime(settings.is24Hour, settings.showSeconds);
+  const { time, period } = formatTime(settings.is24Hour, settings.showSeconds, timezone);
 
   const getFontClass = (fontFamily: string) => {
     switch (fontFamily) {
@@ -30,6 +33,18 @@ export function Clock({ settings }: ClockProps) {
         transform: settings.topPadding !== 0 ? 'translateY(0)' : undefined
       }}
     >
+      {showLabel && label && (
+        <div 
+          className={cn(
+            "text-white/90 mb-2 font-medium tracking-wide",
+            getFontClass(settings.fontFamily)
+          )}
+          style={{ fontSize: `${Math.max(settings.fontSize * 0.2, 14)}px` }}
+        >
+          {label}
+        </div>
+      )}
+      
       <div 
         className={cn(
           "text-white font-bold leading-none tracking-tight transition-all duration-300",
@@ -58,7 +73,7 @@ export function Clock({ settings }: ClockProps) {
         )}
         style={{ fontSize: `${Math.max(settings.fontSize * 0.25, 16)}px` }}
       >
-        {getDate()}
+        {getDate(timezone)}
       </div>
     </div>
   );

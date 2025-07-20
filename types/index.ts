@@ -16,6 +16,11 @@ export interface ClockSettings {
   clockMode: 'clock' | 'stopwatch' | 'timer';
   // NEW: Alarm sound settings
   alarmSound: 'alarm1' | 'alarm2' | 'alarm3' | 'alarm4' | 'alarm5' | 'alarm6';
+  // NEW: Timezone settings
+  primaryTimezone: string;
+  additionalTimezones: TimezoneDisplay[];
+  timezoneDisplayMode: 'city' | 'timezone' | 'both';
+  maxTimezonesDisplayed: number;
 }
 
 export interface BibleVerse {
@@ -98,3 +103,17 @@ export type GradientPreset =
   | 'rose'
   | 'midnight'
   | 'custom';
+
+export interface TimezoneDisplay {
+  id: string;
+  city: string;
+  timezone: string;
+  enabled: boolean;
+}
+
+export interface CityTimezone {
+  city: string;
+  timezone: string;
+  country: string;
+  continent: string;
+}
