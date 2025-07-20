@@ -67,18 +67,28 @@ export function Stopwatch({ fontSize, fontFamily }: StopwatchProps) {
     setTime(0);
   };
 
+  // Calculate responsive sizing based on font size
+  const needsScaling = fontSize > 100;
+  const scaleFactor = needsScaling ? Math.min(1, 100 / fontSize) : 1;
+  
   return (
-    <Card className="glass-dark border-white/10 p-8 max-w-md mx-auto">
+    <Card className="glass-dark border-white/10 p-8 mx-auto w-full max-w-2xl overflow-hidden">
       <div className="text-center animate-fade-in">
         <h3 className="text-white/90 text-xl font-medium mb-6">Stopwatch</h3>
-        <div 
-          className={cn(
-            "text-white font-bold leading-none tracking-tight mb-8 tabular-nums",
-            getFontClass(fontFamily)
-          )}
-          style={{ fontSize: `${fontSize}px` }}
-        >
-          {minutes}:{seconds}.{milliseconds}
+        <div className="relative overflow-hidden px-4">
+          <div 
+            className={cn(
+              "text-white font-bold leading-none tracking-tight mb-8 tabular-nums whitespace-nowrap inline-block transition-transform",
+              getFontClass(fontFamily)
+            )}
+            style={{ 
+              fontSize: `${fontSize}px`,
+              transform: `scale(${scaleFactor})`,
+              transformOrigin: 'center'
+            }}
+          >
+            {minutes}:{seconds}.{milliseconds}
+          </div>
         </div>
         
         <div className="flex gap-4 justify-center">

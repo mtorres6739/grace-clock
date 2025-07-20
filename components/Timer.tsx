@@ -119,8 +119,12 @@ export function Timer({ fontSize, fontFamily, alarmSound }: TimerProps) {
     stopAlarm();
   };
 
+  // Calculate responsive sizing based on font size
+  const needsScaling = fontSize > 100;
+  const scaleFactor = needsScaling ? Math.min(1, 100 / fontSize) : 1;
+
   return (
-    <Card className="glass-dark border-white/10 p-8 max-w-md mx-auto">
+    <Card className="glass-dark border-white/10 p-8 mx-auto w-full max-w-2xl overflow-hidden">
       <div className="text-center animate-fade-in">
         <Confetti isActive={showConfetti} />
 
@@ -162,15 +166,21 @@ export function Timer({ fontSize, fontFamily, alarmSound }: TimerProps) {
           </div>
         ) : (
           <>
-            <div 
-              className={cn(
-                "text-white font-bold leading-none tracking-tight mb-8 tabular-nums",
-                getFontClass(fontFamily),
-                remainingSeconds <= 10 && remainingSeconds > 0 && "text-red-400 animate-pulse"
-              )}
-              style={{ fontSize: `${fontSize}px` }}
-            >
-              {minutes}:{seconds}
+            <div className="relative overflow-hidden px-4">
+              <div 
+                className={cn(
+                  "text-white font-bold leading-none tracking-tight mb-8 tabular-nums whitespace-nowrap inline-block transition-transform",
+                  getFontClass(fontFamily),
+                  remainingSeconds <= 10 && remainingSeconds > 0 && "text-red-400 animate-pulse"
+                )}
+                style={{ 
+                  fontSize: `${fontSize}px`,
+                  transform: `scale(${scaleFactor})`,
+                  transformOrigin: 'center'
+                }}
+              >
+                {minutes}:{seconds}
+              </div>
             </div>
             
             <div className="flex gap-4 justify-center">

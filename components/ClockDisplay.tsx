@@ -23,9 +23,11 @@ export function ClockDisplay({ settings }: ClockDisplayProps) {
     
     // Clock mode
     if (settings.clockType === 'analog') {
+      // Limit analog clock size to prevent overflow
+      const maxSize = Math.min(settings.fontSize * 3, 400);
       return (
         <div className="flex flex-col items-center gap-4">
-          <AnalogClock size={settings.fontSize * 3} />
+          <AnalogClock size={maxSize} />
           <div className="text-white/70 text-lg">{new Date().toLocaleDateString()}</div>
         </div>
       );
