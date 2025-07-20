@@ -1,13 +1,15 @@
 'use client';
 
 import { useBibleVerse } from '@/hooks/useBibleVerse';
+import { useSettings } from '@/hooks/useSettings';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { RefreshCw, BookOpen } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export function BibleVerseCard() {
-  const { verse, isLoading, error, refreshVerse } = useBibleVerse();
+  const { settings } = useSettings();
+  const { verse, isLoading, error, refreshVerse } = useBibleVerse(settings.bibleVersion);
 
   return (
     <Card className="glass-dark rounded-2xl border-white/10 animate-slide-up">
@@ -15,7 +17,7 @@ export function BibleVerseCard() {
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <BookOpen className="h-5 w-5 text-white/70" />
-            <span className="text-white/70 font-medium">Daily Verse</span>
+            <span className="text-white/70 font-medium">Daily Verse ({settings.bibleVersion})</span>
           </div>
           <Button
             variant="ghost"

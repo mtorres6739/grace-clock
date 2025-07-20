@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { BibleVerse } from '@/types';
+import { BibleVerse, BibleVersion } from '@/types';
+import { bibleService } from '@/lib/bible-service';
 
 const FALLBACK_VERSES: BibleVerse[] = [
   {
@@ -41,7 +42,7 @@ const FALLBACK_VERSES: BibleVerse[] = [
   }
 ];
 
-export function useBibleVerse() {
+export function useBibleVerse(version: BibleVersion = 'NIV') {
   const [verse, setVerse] = useState<BibleVerse>(FALLBACK_VERSES[0]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -55,34 +56,8 @@ export function useBibleVerse() {
     setError(null);
 
     try {
-      // Try to fetch from Bible API with timeout
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000);
-
-      const response = await fetch('https://bible-api.com/john+3:16', {
-        signal: controller.signal
-      });
-
-      clearTimeout(timeoutId);
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch verse');
-      }
-
-      const data = await response.json();
-      
-      if (data && data.text && data.reference) {
-        const newVerse: BibleVerse = {
-          text: data.text.trim().replace(/\s+/g, ' ').substring(0, 200),
-          reference: data.reference,
-          book: data.verses?.[0]?.book_name || 'John',
-          chapter: data.verses?.[0]?.chapter || 3,
-          verse: data.verses?.[0]?.verse || 16
-        };
-        setVerse(newVerse);
-      } else {
-        throw new Error('Invalid response format');
-      }
+      const newVerse = await bibleService.getVerseOfTheDay(version);
+      setVerse(newVerse);
     } catch (err) {
       console.error('Error fetching Bible verse:', err);
       setError('Unable to fetch verse');
@@ -90,13 +65,23 @@ export function useBibleVerse() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [version]);
 
-  const refreshVerse = useCallback(() => {
-    // For demo purposes, we'll use a random fallback verse
-    // In production, you could rotate through different API endpoints
-    setVerse(getRandomFallbackVerse());
-  }, []);
+  const refreshVerse = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const newVerse = await bibleService.getRandomVerse(version);
+      setVerse(newVerse);
+    } catch (err) {
+      console.error('Error fetching Bible verse:', err);
+      setError('Unable to fetch verse');
+      setVerse(getRandomFallbackVerse());
+    } finally {
+      setIsLoading(false);
+    }
+  }, [version]);
 
   useEffect(() => {
     // Check if we have a cached verse for today

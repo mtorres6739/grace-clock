@@ -21,6 +21,8 @@ export interface ClockSettings {
   additionalTimezones: TimezoneDisplay[];
   timezoneDisplayMode: 'city' | 'timezone' | 'both';
   maxTimezonesDisplayed: number;
+  // NEW: Bible version settings
+  bibleVersion: BibleVersion;
 }
 
 export interface BibleVerse {
@@ -116,4 +118,12 @@ export interface CityTimezone {
   timezone: string;
   country: string;
   continent: string;
+}
+
+export type BibleVersion = 'KJV' | 'NKJV' | 'NIV' | 'ESV' | 'NLT';
+
+export interface BibleVersionInfo {
+  code: BibleVersion;
+  name: string;
+  fullName: string;
 }

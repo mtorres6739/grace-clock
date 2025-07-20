@@ -24,7 +24,9 @@ const DEFAULT_SETTINGS: ClockSettings = {
   primaryTimezone: getUserTimezone(),
   additionalTimezones: [],
   timezoneDisplayMode: 'both',
-  maxTimezonesDisplayed: 4
+  maxTimezonesDisplayed: 4,
+  // NEW: Bible version settings
+  bibleVersion: 'NIV'
 };
 
 export function useSettings() {
@@ -80,6 +82,11 @@ export function useSettings() {
         }
         if (typeof mergedSettings.maxTimezonesDisplayed !== 'number') {
           mergedSettings.maxTimezonesDisplayed = DEFAULT_SETTINGS.maxTimezonesDisplayed;
+        }
+        
+        // Ensure Bible version exists (backward compatibility)
+        if (!mergedSettings.bibleVersion) {
+          mergedSettings.bibleVersion = DEFAULT_SETTINGS.bibleVersion;
         }
         
         setSettings(mergedSettings);

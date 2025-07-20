@@ -11,13 +11,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Input } from '@/components/ui/input';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Settings, RotateCcw, Palette, Type, Clock, Move, Image as ImageIcon, Timer, Activity, Volume2, Play, Square, Globe } from 'lucide-react';
+import { Settings, RotateCcw, Palette, Type, Clock, Move, Image as ImageIcon, Timer, Activity, Volume2, Play, Square, Globe, BookOpen } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import { BackgroundSelector } from '@/components/BackgroundSelector';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ALARM_SOUNDS, type AlarmSound, createAlarmSound } from '@/lib/sounds-urls';
 import { TimezoneSelector } from '@/components/TimezoneSelector';
+import { BIBLE_VERSIONS } from '@/lib/bible-service';
+import { BibleVersion } from '@/types';
 
 interface SettingsPanelProps {
   settings: ClockSettings;
@@ -469,6 +471,45 @@ export function SettingsPanel({ settings, onSettingsChange, onReset }: SettingsP
               </Select>
             </CardContent>
           </Card>
+
+          {/* Bible Version - Only show for clock mode */}
+          {settings.clockMode === 'clock' && (
+            <Card className="glass-dark border-white/10">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-white flex items-center gap-2 text-lg">
+                  <BookOpen className="h-4 w-4" />
+                  Bible Version
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Select
+                  value={settings.bibleVersion}
+                  onValueChange={(value: BibleVersion) => onSettingsChange({ bibleVersion: value })}
+                >
+                  <SelectTrigger className="bg-white/10 border-white/20 text-white">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-black/90 border-white/20">
+                    {BIBLE_VERSIONS.map((version) => (
+                      <SelectItem 
+                        key={version.code} 
+                        value={version.code} 
+                        className="text-white hover:bg-white/10"
+                      >
+                        <div className="flex items-center justify-between w-full">
+                          <span>{version.name}</span>
+                          <span className="text-xs text-white/60 ml-2">{version.fullName}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <div className="text-xs text-white/50 bg-white/5 p-2 rounded mt-3">
+                  💡 Select your preferred Bible translation for the daily verse display
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Background Images - NEW SECTION */}
           <Card className="glass-dark border-white/10">
